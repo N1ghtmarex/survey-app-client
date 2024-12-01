@@ -2,6 +2,8 @@
 import axios from 'axios'
 import { onMounted, ref } from 'vue'
 
+import QuestionList from '.././components/QuestionList.vue'
+
 const props = defineProps({
   id: {
     type: String,
@@ -15,7 +17,7 @@ onMounted(async () => {
   try {
     const { data } = await axios.get(`https://localhost:7156/api/surveys/${props.id}`)
     survey.value = data
-    console.log(data.questions)
+    console.log(survey.value.questions)
   } catch (e) {
     console.log(e)
   }
@@ -24,15 +26,6 @@ onMounted(async () => {
 
 <template>
   <div v-if="survey">
-    <h1>Название опроса: {{ survey.name }}</h1>
-    <p>Описание: {{ survey.description }}</p>
-    <div v-for="question in survey.questions" :key="question.id">
-      <h1>Текст вопроса: {{ question.title }}</h1>
-      <ul>
-        <li v-for="(answer, index) in question.answers" :key="answer.id">
-          {{ index + 1 + ') ' + answer.title }}
-        </li>
-      </ul>
-    </div>
+    <QuestionList :survey="survey" />
   </div>
 </template>

@@ -20,7 +20,9 @@
         <span>Пройденные опросы</span>
       </li>
       <li class="hover:text-black cursor-pointer">
-        <span>Войти</span>
+        <router-link to="/login">
+          <span>Войти</span>
+        </router-link>
       </li>
     </ul>
   </header>
