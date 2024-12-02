@@ -17,6 +17,6 @@ onMounted(async () => {
 
 <template>
   <li v-for="item in items" :key="item.id">
-    <router-link :to="`/survey/${item.id}`">{{ item.name }}</router-link>
+    <router-link :to="`/surveypage/${item.id}`">{{ item.name }}</router-link>
   </li>
 </template>

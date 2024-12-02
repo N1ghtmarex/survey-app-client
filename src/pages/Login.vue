@@ -2,12 +2,16 @@
 import axios from 'axios'
 import { ref } from 'vue'
 
+if (document.cookie.includes('auth_status=true')) {
+  window.location.href = '/'
+}
+
 const username = ref('')
 const password = ref('')
 
 const handleLogin = () => {
   console.log('Email:', username.value, 'Password:', password.value)
-  // Реализуйте логику авторизации
+
   try {
     axios.default.withCredentials = true
     axios
@@ -22,7 +26,7 @@ const handleLogin = () => {
         },
       )
       .then((response) => {
-        console.log(response)
+        window.location.href = '/'
       })
       .catch((error) => {
         console.log(error)
@@ -34,13 +38,15 @@ const handleLogin = () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
-    <div class="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">
+  <div class="flex items-center justify-center">
+    <div class="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md border">
       <h2 class="text-2xl font-bold text-center text-gray-700">Добро пожаловать!</h2>
       <form @submit.prevent="handleLogin">
         <div class="space-y-4">
           <div>
-            <label for="username" class="block text-sm font-medium text-gray-600">Username</label>
+            <label for="username" class="block text-sm font-medium text-gray-600"
+              >Имя пользователя</label
+            >
             <input
               v-model="username"
               type="username"
@@ -72,7 +78,7 @@ const handleLogin = () => {
       <div class="text-sm text-center text-gray-500">
         Нет аккаунта?
         <router-link to="/register">
-          <a href="#" class="text-blue-500 hover:underline">Зарегистрируйтесь</a>
+          <span class="text-blue-500 hover:underline">Зарегистрируйтесь</span>
         </router-link>
       </div>
     </div>

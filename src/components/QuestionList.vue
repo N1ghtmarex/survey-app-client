@@ -13,6 +13,7 @@ let currentQuestionIndex = ref(0)
 let selectedAnswers = ref({})
 let choices = ref([])
 let viewStatus = ref(false)
+let surveyBind = ref()
 
 axios.default.withCredentials = true
 
@@ -107,6 +108,15 @@ onMounted(() => {
       .then((response) => {
         console.log(response.data)
         surveyStatus.value = response.data
+        console.log(surveyStatus.value)
+
+        axios
+          .get(`https://localhost:7156/api/surveys/bind/${props.survey.id}`, {
+            withCredentials: true,
+          })
+          .then((response) => {
+            surveyBind.value = response.data
+          })
       })
   } catch (error) {
     console.log(error)
@@ -132,6 +142,31 @@ function getChoices(surveyId) {
 </script>
 
 <template>
+  <div class="state" v-if="surveyStatus == 'Completed'">
+    <h1>Начат</h1>
+    <p>
+      {{
+        formatInTimeZone(
+          surveyBind.startedAt,
+          Intl.DateTimeFormat().resolvedOptions().timeZone,
+          'dd.MM.yyyy HH:mm',
+          { locale: ru },
+        )
+      }}
+    </p>
+    <h1>Завершен</h1>
+    <p>
+      {{
+        formatInTimeZone(
+          surveyBind.completedAt,
+          Intl.DateTimeFormat().resolvedOptions().timeZone,
+          'dd.MM.yyyy HH:mm',
+          { locale: ru },
+        )
+      }}
+    </p>
+  </div>
+
   <div class="about" v-if="surveyStatus != 'InProgress'">
     <h1>Название опроса: {{ survey.name }}</h1>
     <p>Описание: {{ survey.description }}</p>

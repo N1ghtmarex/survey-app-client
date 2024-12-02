@@ -6,13 +6,11 @@ const name = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 
-const handleRegister = () => {
+const register = () => {
   if (password.value !== confirmPassword.value) {
     alert('Пароли не совпадают!')
     return
   }
-
-  console.log('Name:', name.value, 'Password:', password.value)
 
   try {
     axios
@@ -33,10 +31,10 @@ const handleRegister = () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
-    <div class="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">
+  <div class="flex items-center justify-center">
+    <div class="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md border">
       <h2 class="text-2xl font-bold text-center text-gray-700">Регистрация</h2>
-      <form @submit.prevent="handleRegister">
+      <form @submit.prevent="register">
         <div class="space-y-4">
           <div>
             <label for="name" class="block text-sm font-medium text-gray-600">Имя</label>
@@ -84,7 +82,7 @@ const handleRegister = () => {
       <div class="text-sm text-center text-gray-500">
         Уже есть аккаунт?
         <router-link to="/login">
-          <a href="/login" class="text-blue-500 hover:underline">Войти</a>
+          <span class="text-blue-500 hover:underline">Войти</span>
         </router-link>
       </div>
     </div>

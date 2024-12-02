@@ -1,3 +1,7 @@
+<script setup>
+const isAuth = document.cookie.includes('auth_status=true')
+</script>
+
 <template>
   <header class="flex justify-between border-b border-slate-300 px-8 py-2">
     <router-link to="/">
@@ -17,11 +21,18 @@
         </router-link>
       </li>
       <li class="hover:text-black cursor-pointer">
-        <span>Пройденные опросы</span>
+        <router-link to="/addSurvey">
+          <span>Добавить опрос</span>
+        </router-link>
       </li>
       <li class="hover:text-black cursor-pointer">
-        <router-link to="/login">
+        <router-link to="/login" v-if="!isAuth">
           <span>Войти</span>
+        </router-link>
+      </li>
+      <li class="hover:text-black cursor-pointer">
+        <router-link to="/logout" v-if="isAuth">
+          <span>Выйти</span>
         </router-link>
       </li>
     </ul>
