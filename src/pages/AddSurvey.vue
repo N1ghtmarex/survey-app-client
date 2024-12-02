@@ -3,7 +3,6 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 let createdSurveyId = null
-// Поля для формы
 const surveyTitle = ref('')
 const surveyDescription = ref('')
 const questions = ref([
@@ -13,29 +12,23 @@ const questions = ref([
   },
 ])
 
-// Добавить новый вопрос
 function addQuestion() {
   questions.value.push({ text: '', answers: [''] })
 }
 
-// Удалить вопрос
 function removeQuestion(index) {
   questions.value.splice(index, 1)
 }
 
-// Добавить вариант ответа к конкретному вопросу
 function addAnswerOption(questionIndex) {
   questions.value[questionIndex].answers.push('')
 }
 
-// Удалить вариант ответа
 function removeAnswerOption(questionIndex, optionIndex) {
   questions.value[questionIndex].answers.splice(optionIndex, 1)
 }
 
-// Отправить данные
 function submitSurvey() {
-  // Валидация
   if (!surveyTitle.value || questions.value.length === 0) {
     alert('Пожалуйста, заполните название опроса и добавьте хотя бы один вопрос.')
     return
@@ -48,7 +41,6 @@ function submitSurvey() {
     }
   }
 
-  // Формирование данных для отправки
   const newSurvey = {
     name: surveyTitle.value,
     description: surveyDescription.value,
@@ -65,7 +57,6 @@ function submitSurvey() {
     newSurvey.description = null
   }
 
-  // Логируем данные (можно заменить на отправку на сервер)
   console.log('Опрос создан:', newSurvey)
   try {
     axios.post('https://localhost:7156/api/surveys/create', newSurvey)
@@ -73,10 +64,6 @@ function submitSurvey() {
     console.log(error)
   }
 
-  //Создание опроса
-
-  //Создание вопроса
-  // Очистка формы
   surveyTitle.value = ''
   surveyDescription.value = ''
   questions.value = [{ text: '', answers: [''] }]
@@ -87,7 +74,6 @@ function submitSurvey() {
   <div class="survey-creation">
     <h1>Создание нового опроса</h1>
 
-    <!-- Название опроса -->
     <div class="form-group">
       <label for="survey-title">Название:</label>
       <input
@@ -98,7 +84,6 @@ function submitSurvey() {
       />
     </div>
 
-    <!-- Описание опроса -->
     <div class="form-group">
       <label for="survey-description">Описание:</label>
       <textarea
@@ -108,17 +93,14 @@ function submitSurvey() {
       ></textarea>
     </div>
 
-    <!-- Вопросы -->
     <div v-for="(question, questionIndex) in questions" :key="questionIndex" class="question-block">
       <h3>Вопрос {{ questionIndex + 1 }}</h3>
 
-      <!-- Текст вопроса -->
       <div class="form-group">
         <label>Текст вопроса:</label>
         <input type="text" v-model="question.text" placeholder="Введите текст вопроса" />
       </div>
 
-      <!-- Варианты ответа -->
       <div class="form-group">
         <label>Варианты ответа:</label>
         <div
@@ -136,14 +118,11 @@ function submitSurvey() {
         <button @click="addAnswerOption(questionIndex)">Добавить вариант ответа</button>
       </div>
 
-      <!-- Удаление вопроса -->
       <button class="remove-question" @click="removeQuestion(questionIndex)">Удалить вопрос</button>
     </div>
 
-    <!-- Кнопка для добавления нового вопроса -->
     <button @click="addQuestion">Добавить вопрос</button>
 
-    <!-- Кнопка для сохранения -->
     <button @click="submitSurvey">Создать опрос</button>
   </div>
 </template>
@@ -152,7 +131,6 @@ function submitSurvey() {
 .survey-creation {
   max-width: 800px;
   margin: 0 auto;
-  font-family: Arial, sans-serif;
 }
 
 .form-group {

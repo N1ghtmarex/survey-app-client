@@ -56,7 +56,7 @@ function startSurvey() {
 }
 
 function makeChoice(questionId, answerId) {
-  if (surveyStatus == 'В процессе') {
+  if (surveyStatus.value == 'В процессе') {
     let index = choices.value.findIndex((x) => x.questionId == questionId)
     if (index > -1) {
       choices.value[index].answerId = answerId
