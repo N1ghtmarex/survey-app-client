@@ -33,7 +33,6 @@ function getSurvey() {
   try {
     axios.get(`https://localhost:7156/api/surveys/${props.id}`).then((response) => {
       survey.value = response.data
-      console.log(response)
     })
   } catch (error) {
     console.log(error)
@@ -118,7 +117,7 @@ function updateSurvey() {
             type: question.type,
           })
           .then((response) => {
-            let questionId = response.data
+            let questionId = response.data.id
             question.answers.forEach((answer) => {
               axios.post('https://localhost:7156/api/answer/add', {
                 questionId: questionId,
@@ -140,7 +139,6 @@ function updateSurvey() {
       })
     })
 
-    console.log(addedAnswers.length)
     addedAnswers.forEach((answer) => {
       if (answer.questionId != null) {
         axios.post('https://localhost:7156/api/answer/add', {
@@ -155,15 +153,11 @@ function updateSurvey() {
     })
 
     removedAnswersId.forEach((id) => {
-      console.log(id)
       axios.delete(`https://localhost:7156/api/answer/${id}`)
     })
   } catch (error) {
     console.log(error)
   }
-  let nullAnswerNotNullQuestion = survey.value.questions.flatMap((question) =>
-    question.answers.filter((answer) => answer.id == null && answer.questionId != null),
-  )
 }
 
 onMounted(() => {

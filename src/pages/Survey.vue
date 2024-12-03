@@ -2,7 +2,6 @@
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
 import { formatInTimeZone } from 'date-fns-tz'
-import { ca, ru, tr } from 'date-fns/locale'
 
 const props = defineProps({
   id: {
@@ -70,7 +69,7 @@ function makeChoice(questionId, answerId) {
       axios.post(
         'https://localhost:7156/api/choice',
         {
-          answerId: answerId,
+          answerId,
         },
         {
           withCredentials: true,
@@ -95,8 +94,8 @@ function comleteSurvey() {
         },
       )
       .then((surveyStatus.value = 'Завершен'))
-  } catch (e) {
-    console.log(e)
+  } catch (error) {
+    console.log(error)
   }
 }
 

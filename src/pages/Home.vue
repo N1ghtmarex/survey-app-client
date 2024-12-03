@@ -22,9 +22,8 @@ onMounted(async () => {
   try {
     const { data } = await axios.get('https://localhost:7156/api/surveys')
     items.value = data.surveys
-    console.log(items.value)
-  } catch (e) {
-    console.log(e)
+  } catch (error) {
+    console.log(error)
   }
 })
 </script>

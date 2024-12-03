@@ -2,7 +2,6 @@
 import axios from 'axios'
 import { ref } from 'vue'
 
-let createdSurveyId = null
 const surveyTitle = ref('')
 const surveyDescription = ref('')
 const questions = ref([
@@ -57,9 +56,14 @@ function submitSurvey() {
     newSurvey.description = null
   }
 
-  console.log('Опрос создан:', newSurvey)
   try {
-    axios.post('https://localhost:7156/api/surveys/create', newSurvey)
+    axios.post('https://localhost:7156/api/surveys/create', newSurvey).then((response) => {
+      if (Number(response.status) == 200) {
+        alert('Опрос создан!')
+      } else {
+        alert('Ошибка! Пожалуйста, повторите попытку позднее.')
+      }
+    })
   } catch (error) {
     console.log(error)
   }
@@ -114,19 +118,15 @@ function submitSurvey() {
 
       <div class="mb-4">
         <label class="block font-semibold mb-2">Варианты ответа:</label>
-        <div
-          v-for="(option, optionIndex) in question.answers"
-          :key="optionIndex"
-          class="flex items-center gap-4 mb-2"
-        >
+        <div v-for="answer in question.answers" :key="answer" class="flex items-center gap-4 mb-2">
           <input
             type="text"
-            v-model="question.answers[optionIndex]"
+            v-model="question.answers[answer]"
             placeholder="Введите вариант ответа"
             class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
-            @click="removeAnswerOption(questionIndex, optionIndex)"
+            @click="removeAnswerOption(questionIndex, answer)"
             class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
           >
             Удалить

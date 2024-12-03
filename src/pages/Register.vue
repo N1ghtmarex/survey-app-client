@@ -24,8 +24,8 @@ const register = () => {
       .catch((error) => {
         alert(error.response.data.Message)
       })
-  } catch (e) {
-    console.log(e)
+  } catch (error) {
+    console.log(error)
   }
 }
 </script>

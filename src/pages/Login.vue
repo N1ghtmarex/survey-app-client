@@ -9,9 +9,7 @@ if (document.cookie.includes('auth_status=true')) {
 const username = ref('')
 const password = ref('')
 
-const handleLogin = () => {
-  console.log('Email:', username.value, 'Password:', password.value)
-
+const login = () => {
   try {
     axios.default.withCredentials = true
     axios
@@ -25,14 +23,14 @@ const handleLogin = () => {
           withCredentials: true,
         },
       )
-      .then((response) => {
+      .then(() => {
         window.location.href = '/'
       })
       .catch((error) => {
-        console.log(error)
+        alert(error.response.data.Message)
       })
-  } catch (e) {
-    console.log(e)
+  } catch (error) {
+    console.log(error)
   }
 }
 </script>
@@ -41,7 +39,7 @@ const handleLogin = () => {
   <div class="flex items-center justify-center">
     <div class="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md border">
       <h2 class="text-2xl font-bold text-center text-gray-700">Добро пожаловать!</h2>
-      <form @submit.prevent="handleLogin">
+      <form @submit.prevent="login">
         <div class="space-y-4">
           <div>
             <label for="username" class="block text-sm font-medium text-gray-600"
