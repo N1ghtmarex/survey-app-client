@@ -156,7 +156,7 @@ function updateSurvey() {
 
     removedAnswersId.forEach((id) => {
       console.log(id)
-      axios.delete(`https://localhost:7156/api/answer${id}`)
+      axios.delete(`https://localhost:7156/api/answer/${id}`)
     })
   } catch (error) {
     console.log(error)
