@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
 import { formatInTimeZone } from 'date-fns-tz'
+import { ru } from 'date-fns/locale'
 
 const props = defineProps({
   id: {

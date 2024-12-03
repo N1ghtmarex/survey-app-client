@@ -6,71 +6,93 @@ const surveyTitle = ref('')
 const surveyDescription = ref('')
 const questions = ref([
   {
-    text: '',
-    answers: [''],
+    title: '',
+    type: 0,
+    answers: [
+      {
+        title: '',
+      },
+    ],
   },
 ])
 
 function addQuestion() {
-  questions.value.push({ text: '', answers: [''] })
+  questions.value.push({
+    title: '',
+    type: 0,
+    answers: [
+      {
+        title: '',
+      },
+    ],
+  })
 }
 
 function removeQuestion(index) {
   questions.value.splice(index, 1)
 }
 
-function addAnswerOption(questionIndex) {
-  questions.value[questionIndex].answers.push('')
+function addAnswer(questionIndex) {
+  questions.value[questionIndex].answers.push({
+    title: '',
+  })
 }
 
-function removeAnswerOption(questionIndex, optionIndex) {
-  questions.value[questionIndex].answers.splice(optionIndex, 1)
+function removeAnswer(questionIndex, answerIndex) {
+  questions.value[questionIndex].answers.splice(answerIndex, 1)
 }
 
-function submitSurvey() {
+async function createSurvey() {
   if (!surveyTitle.value || questions.value.length === 0) {
     alert('Пожалуйста, заполните название опроса и добавьте хотя бы один вопрос.')
     return
   }
 
   for (const question of questions.value) {
-    if (!question.text || question.answers.length === 0) {
+    if (!question.title || question.answers.length === 0) {
       alert('Пожалуйста, заполните текст всех вопросов и добавьте варианты ответа.')
+      return
+    }
+    if (question.answers.some((answer) => !answer.title)) {
+      alert('Все варианты ответов должны быть заполнены.')
       return
     }
   }
 
   const newSurvey = {
     name: surveyTitle.value,
-    description: surveyDescription.value,
-    questions: questions.value.map((question) => ({
-      title: question.text,
-      type: 0,
-      answers: question.answers.map((answer, index) => ({
-        title: answer,
-      })),
-    })),
-  }
-
-  if (newSurvey.description == '') {
-    newSurvey.description = null
+    description: surveyDescription.value || null,
+    questions: questions.value,
   }
 
   try {
-    axios.post('https://localhost:7156/api/surveys/create', newSurvey).then((response) => {
-      if (Number(response.status) == 200) {
-        alert('Опрос создан!')
-      } else {
-        alert('Ошибка! Пожалуйста, повторите попытку позднее.')
-      }
-    })
+    const response = await axios.post('https://localhost:7156/api/surveys/create', newSurvey)
+    if (response.status === 200) {
+      alert('Опрос создан!')
+      resetSurvey()
+    } else {
+      alert('Ошибка! Пожалуйста, повторите попытку позднее.')
+    }
   } catch (error) {
-    console.log(error)
+    console.error(error)
+    alert('Произошла ошибка при отправке данных.')
   }
+}
 
+function resetSurvey() {
   surveyTitle.value = ''
   surveyDescription.value = ''
-  questions.value = [{ text: '', answers: [''] }]
+  questions.value = [
+    {
+      title: '',
+      type: 0,
+      answers: [
+        {
+          title: '',
+        },
+      ],
+    },
+  ]
 }
 </script>
 
@@ -94,7 +116,7 @@ function submitSurvey() {
       <textarea
         id="survey-description"
         v-model="surveyDescription"
-        placeholder="Введите описание опроса"
+        placeholder="Введите описание опроса (необязательно)"
         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       ></textarea>
     </div>
@@ -110,7 +132,7 @@ function submitSurvey() {
         <label class="block font-semibold mb-2">Текст вопроса:</label>
         <input
           type="text"
-          v-model="question.text"
+          v-model="question.title"
           placeholder="Введите текст вопроса"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -118,22 +140,26 @@ function submitSurvey() {
 
       <div class="mb-4">
         <label class="block font-semibold mb-2">Варианты ответа:</label>
-        <div v-for="answer in question.answers" :key="answer" class="flex items-center gap-4 mb-2">
+        <div
+          v-for="(answer, answerIndex) in question.answers"
+          :key="answerIndex"
+          class="flex items-center gap-4 mb-2"
+        >
           <input
             type="text"
-            v-model="question.answers[answer]"
+            v-model="answer.title"
             placeholder="Введите вариант ответа"
             class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
-            @click="removeAnswerOption(questionIndex, answer)"
+            @click="removeAnswer(questionIndex, answerIndex)"
             class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
           >
             Удалить
           </button>
         </div>
         <button
-          @click="addAnswerOption(questionIndex)"
+          @click="addAnswer(questionIndex)"
           class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
         >
           Добавить вариант ответа
@@ -156,7 +182,7 @@ function submitSurvey() {
         Добавить вопрос
       </button>
       <button
-        @click="submitSurvey"
+        @click="createSurvey"
         class="px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800"
       >
         Создать опрос
