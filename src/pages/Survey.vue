@@ -38,15 +38,9 @@ function getChoices() {
 function startSurvey() {
   try {
     axios
-      .post(
-        'https://localhost:7156/api/surveys/start',
-        {
-          surveyId: props.id,
-        },
-        {
-          withCredentials: true,
-        },
-      )
+      .post(`https://localhost:7156/api/surveys/start/${props.id}`, null, {
+        withCredentials: true,
+      })
       .then((response) => {
         surveyStatus.value = 'В процессе'
       })
@@ -85,15 +79,9 @@ function makeChoice(questionId, answerId) {
 function comleteSurvey() {
   try {
     axios
-      .post(
-        'https://localhost:7156/api/surveys/complete',
-        {
-          surveyId: props.id,
-        },
-        {
-          withCredentials: true,
-        },
-      )
+      .post(`https://localhost:7156/api/surveys/complete/${props.id}`, null, {
+        withCredentials: true,
+      })
       .then((surveyStatus.value = 'Завершен'))
   } catch (error) {
     console.log(error)
