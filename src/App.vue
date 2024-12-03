@@ -8,7 +8,6 @@ import Home from './pages/Home.vue'
     <Header />
 
     <div class="p-10">
-      <h2 class="text-2xl font-bold mb-8">Все опросы</h2>
       <router-view></router-view>
     </div>
   </div>

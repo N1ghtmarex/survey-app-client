@@ -71,122 +71,96 @@ function submitSurvey() {
 </script>
 
 <template>
-  <div class="survey-creation">
-    <h1>Создание нового опроса</h1>
+  <div class="max-w-3xl mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6 text-center">Создание нового опроса</h1>
 
-    <div class="form-group">
-      <label for="survey-title">Название:</label>
+    <div class="mb-4">
+      <label for="survey-title" class="block text-lg font-semibold mb-2">Название:</label>
       <input
         id="survey-title"
         type="text"
         v-model="surveyTitle"
         placeholder="Введите название опроса"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
     </div>
 
-    <div class="form-group">
-      <label for="survey-description">Описание:</label>
+    <div class="mb-6">
+      <label for="survey-description" class="block text-lg font-semibold mb-2">Описание:</label>
       <textarea
         id="survey-description"
         v-model="surveyDescription"
         placeholder="Введите описание опроса"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       ></textarea>
     </div>
 
-    <div v-for="(question, questionIndex) in questions" :key="questionIndex" class="question-block">
-      <h3>Вопрос {{ questionIndex + 1 }}</h3>
+    <div
+      v-for="(question, questionIndex) in questions"
+      :key="questionIndex"
+      class="mb-6 p-4 border border-gray-300 rounded-lg bg-white"
+    >
+      <h3 class="text-lg font-semibold mb-4">Вопрос {{ questionIndex + 1 }}</h3>
 
-      <div class="form-group">
-        <label>Текст вопроса:</label>
-        <input type="text" v-model="question.text" placeholder="Введите текст вопроса" />
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Текст вопроса:</label>
+        <input
+          type="text"
+          v-model="question.text"
+          placeholder="Введите текст вопроса"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
       </div>
 
-      <div class="form-group">
-        <label>Варианты ответа:</label>
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Варианты ответа:</label>
         <div
           v-for="(option, optionIndex) in question.answers"
           :key="optionIndex"
-          class="answer-option"
+          class="flex items-center gap-4 mb-2"
         >
           <input
             type="text"
             v-model="question.answers[optionIndex]"
             placeholder="Введите вариант ответа"
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <button @click="removeAnswerOption(questionIndex, optionIndex)">Удалить</button>
+          <button
+            @click="removeAnswerOption(questionIndex, optionIndex)"
+            class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+          >
+            Удалить
+          </button>
         </div>
-        <button @click="addAnswerOption(questionIndex)">Добавить вариант ответа</button>
+        <button
+          @click="addAnswerOption(questionIndex)"
+          class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+        >
+          Добавить вариант ответа
+        </button>
       </div>
 
-      <button class="remove-question" @click="removeQuestion(questionIndex)">Удалить вопрос</button>
+      <button
+        @click="removeQuestion(questionIndex)"
+        class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 w-full"
+      >
+        Удалить вопрос
+      </button>
     </div>
 
-    <button @click="addQuestion">Добавить вопрос</button>
-
-    <button @click="submitSurvey">Создать опрос</button>
+    <div class="flex justify-between items-center mt-6">
+      <button
+        @click="addQuestion"
+        class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+      >
+        Добавить вопрос
+      </button>
+      <button
+        @click="submitSurvey"
+        class="px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800"
+      >
+        Создать опрос
+      </button>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.survey-creation {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.form-group {
-  margin-bottom: 1.5em;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5em;
-  font-weight: bold;
-}
-
-input,
-textarea {
-  width: 100%;
-  padding: 0.5em;
-  font-size: 1em;
-  margin-bottom: 0.5em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  padding: 0.5em 1em;
-  font-size: 1em;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-.answer-option {
-  display: flex;
-  align-items: center;
-  gap: 1em;
-  margin-bottom: 0.5em;
-}
-
-.question-block {
-  border: 1px solid #ddd;
-  padding: 1em;
-  margin-bottom: 1.5em;
-  border-radius: 4px;
-  background-color: #f9f9f9;
-}
-
-.remove-question {
-  background-color: #ff6347;
-}
-
-.remove-question:hover {
-  background-color: #c44c3b;
-}
-</style>
