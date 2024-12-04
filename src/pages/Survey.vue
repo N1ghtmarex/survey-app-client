@@ -44,6 +44,9 @@ function startSurvey() {
       .then((response) => {
         surveyStatus.value = 'В процессе'
       })
+      .catch((error) => {
+        alert('При запуске опроса возникла ошибка, проверьте, вошли ли вы в аккаунт.')
+      })
   } catch (error) {
     console.log(error)
   }
